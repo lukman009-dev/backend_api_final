@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Uthibitisho wa Tabia Njema / Udhamini</title>
+    <style>
+
+        /* Explicit page box for the PDF renderer (openhtmltopdf).
+           Without this, it falls back to its default Letter page
+           size/margins, which don't match the 210mm .a4-page box
+           below and were clipping the left edge of the content. */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        /* =========================================================
+           GENERAL PAGE
+           ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+
+            padding: 18mm 20mm 16mm 20mm;
+
+            margin: 0;
+
+            background: #ffffff;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+
+        /* =========================================================
+           LETTERHEAD
+           ========================================================= */
+
+        .letterhead {
+            text-align: center;
+
+            border-bottom: 2px solid #000;
+
+            padding-bottom: 10px;
+
+            margin-bottom: 16px;
+        }
+
+        /* SMZ LOGO */
+
+        .smz-logo {
+            display: block;
+
+            width: 100px;
+            height: auto;
+
+            margin: 0 auto 8px auto;
+        }
+
+        .letterhead h2 {
+            font-size: 1.1rem;
+
+            text-transform: uppercase;
+
+            font-weight: 700;
+
+            margin-bottom: 2px;
+        }
+
+        .letterhead h3 {
+            font-size: 1rem;
+
+            text-transform: uppercase;
+
+            font-weight: 600;
+
+            margin-bottom: 3px;
+        }
+
+        .letterhead p {
+            font-size: 0.8rem;
+
+            color: #1e293b;
+        }
+
+
+        /* =========================================================
+           LETTER META INFORMATION
+           ========================================================= */
+
+        .letter-meta {
+            display: flex;
+
+            justify-content: space-between;
+
+            font-size: 0.9rem;
+
+            margin-bottom: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================================
+           SUBJECT
+           ========================================================= */
+
+        .subject-line {
+            font-weight: 700;
+
+            text-decoration: underline;
+
+            font-size: 0.95rem;
+
+            text-transform: uppercase;
+
+            margin: 12px 0 16px 0;
+        }
+
+
+        /* =========================================================
+           LETTER BODY
+           ========================================================= */
+
+        .letter-body {
+            font-size: 0.95rem;
+
+            line-height: 1.7;
+
+            text-align: justify;
+
+            flex: 1;
+        }
+
+        .letter-body p {
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        .footer-section {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            margin-top: 24px;
+
+            border-top: 1px dashed #aaa;
+
+            padding-top: 14px;
+        }
+
+
+        /* =========================================================
+           SIGNATURE
+           ========================================================= */
+
+        .signature-block {
+            font-size: 0.9rem;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           QR CODE
+           ========================================================= */
+
+        .qr-block {
+            text-align: center;
+
+            font-size: 0.7rem;
+        }
+
+        .qr-code {
+            width: 75px;
+
+            height: 75px;
+
+            display: block;
+
+            margin: 0 auto;
+        }
+
+
+        /* =========================================================
+           HASH
+           ========================================================= */
+
+        .hash-code {
+            font-family: "Courier New", monospace;
+
+            font-size: 0.6rem;
+
+            color: #444;
+
+            margin-top: 4px;
+
+            word-break: break-all;
+
+            max-width: 140px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="a4-page">
+    <div class="letterhead">
+        <img
+                th:src="'data:image/png;base64,' + ${logoBase64}"
+                width="100"
+                alt="Serikali ya Mapinduzi ya Zanzibar Logo"
+                class="smz-logo"
+        />
+        <h2>SERIKALI YA MAPINDUZI YA ZANZIBAR</h2>
+        <h3>OFISI YA SHEHA WA SHEHIA YA <span th:text="${shehiaName}">KIKWAJUNI JUU</span></h3>
+        <p>Wilaya ya <span th:text="${districtName}">Mjini</span> &#8226; Mkoa wa <span th:text="${regionName}">Mjini Magharibi</span> &#8226; Simu: <span th:text="${shehiaPhone}">+255 770 000 000</span></p>
+    </div>
+
+    <div class="letter-meta">
+
+        <div>
+
+            <strong>Kumb. Na:</strong>
+            <span th:text="${refNo}">
+            SH/COND/26/103
+        </span>
+
+            <br />
+
+            <strong>KWA:</strong>
+            <span th:text="${employerTitle + ' – ' + institutionName}">
+            Mkurugenzi wa HR – Wizara ya Elimu
+        </span>
+
+        </div>
+
+
+        <div>
+
+            <strong>Tarehe:</strong>
+            <span th:text="${letterDate}">
+            24/08/2026
+        </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+            class="subject-line"
+            th:text="'YAH: UTHIBITISHO WA TABIA NJEMA NA UDHAMINI WA NDG. ' + ${#strings.toUpperCase(citizenName)}"
+    >
+        YAH: UTHIBITISHO WA TABIA NJEMA NA UDHAMINI WA NDG. SALIM MOHAMMED OMAR
+    </div>
+
+
+    <div class="letter-body">
+
+        <p>
+            Tafadhali husika na mada hapo juu.
+        </p>
+
+
+        <p>
+
+            Ofisi ya Sheha inathibitisha kuwa inamfahamu vyema Ndg.
+
+            <strong th:text="${citizenName}">
+                Salim Mohammed Omar
+            </strong>
+
+            anayeishi
+
+            <strong>
+                Nyumba Na.
+                <span th:text="${houseNo}">
+                MK-12
+            </span>,
+
+                Mtaa wa
+                <span th:text="${street}">
+                Mlandege
+            </span>
+            </strong>.
+
+            Katika kipindi chote alichoishi katika eneo hili,
+            amekuwa raia mwema, mwenye nidhamu na tabia njema,
+            na hana kumbukumbu yoyote ya uhalifu au udanganyifu.
+
+        </p>
+
+
+        <p>
+
+            Mhusika anaomba
+
+            <strong th:text="${purpose}">
+                Kuomba Nafasi ya Kazi
+            </strong>
+
+            katika
+
+            <strong th:text="${institutionName}">
+                Wizara ya Elimu
+            </strong>.
+
+            Shehia inamdhamini na kuthibitisha kuwa taarifa zake
+            za makazi na familia ni za kweli na zinaaminika.
+
+        </p>
+
+    </div>
+
+    <div class="footer-section">
+        <div class="signature-block">
+            <p>___________________________</p>
+            <p><strong>Sheha wa Shehia:</strong> <span th:text="${shehaName}">Khamis Juma Ali</span></p>
+            <p>Shehia ya <span th:text="${shehiaName}">Kikwajuni Juu</span></p>
+        </div>
+        <div class="qr-block">
+            <img th:if="${qrCodeBase64 != null}" th:src="'data:image/png;base64,' + ${qrCodeBase64}" width="75" height="75" alt="QR Code"/>
+            <p style="margin-top:4px; font-weight:600;">Scan Ku-verify</p>
+            <div class="hash-code" th:text="'HASH: ' + ${hashCode}">HASH: 8F9A-12B3-99X0</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
